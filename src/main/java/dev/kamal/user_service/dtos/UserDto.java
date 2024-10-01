@@ -1,6 +1,7 @@
 package dev.kamal.user_service.dtos;
 
 import dev.kamal.user_service.models.Role;
+import dev.kamal.user_service.models.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,4 +13,13 @@ public class UserDto {
     private String name;
     private String email;
     private List<Role> roles;
+
+    public static UserDto from(User user){
+        UserDto userDto = new UserDto();
+        userDto.setName(user.getName());
+        userDto.setEmail(user.getEmail());
+        userDto.setRoles(user.getRoles());
+
+        return userDto;
+    }
 }
