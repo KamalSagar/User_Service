@@ -49,8 +49,8 @@ public class UserController {
         userService.logout(requestDto.getToken());
     }
 
-    @GetMapping("/validate")
-    public UserDto validateToken(String token){
+    @GetMapping("/validate/{token}")
+    public UserDto validateToken(@PathVariable String token){
         User user = userService.validateToken(token);
 
         // convert user into userDto
