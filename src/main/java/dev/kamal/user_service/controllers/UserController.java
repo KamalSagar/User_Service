@@ -1,10 +1,7 @@
 package dev.kamal.user_service.controllers;
 
-import dev.kamal.user_service.dtos.LoginRequestDto;
-import dev.kamal.user_service.dtos.LoginResponseDto;
+import dev.kamal.user_service.dtos.*;
 import dev.kamal.user_service.dtos.ResponseStatus;
-import dev.kamal.user_service.dtos.UserDto;
-import dev.kamal.user_service.dtos.SignUpRequestDto;
 import dev.kamal.user_service.models.Token;
 import dev.kamal.user_service.models.User;
 import dev.kamal.user_service.services.UserService;
@@ -48,13 +45,16 @@ public class UserController {
     }
 
     @PatchMapping("/logout")
-    public void logout(@RequestBody LoginRequestDto loginRequestDto){
-
+    public void logout(@RequestBody LogoutRequestDto requestDto){
+        userService.logout(requestDto.getToken());
     }
 
     @GetMapping("/validate")
     public UserDto validateToken(String token){
-        return null;
+        User user = userService.validateToken(token);
+
+        // convert user into userDto
+        return UserDto.from(user);
     }
 
 }

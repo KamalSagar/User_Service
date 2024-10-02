@@ -61,11 +61,37 @@ public class UserService {
     }
 
     public void logout(String tokenValue){
+        Optional<Token> optionalToken = tokenRepository.findByValueAndDeletedAndExpiryAtGreaterThan(
+                tokenValue,
+                false,
+                new Date()
+        );
 
+        if(optionalToken.isEmpty()){
+            // throw TokenInvaledException
+            return;
+        }
+
+        Token token = optionalToken.get();
+        token.setDeleted(true);
+        tokenRepository.save(token);
     }
 
-    public User validateUser(String tokenValue){
-        return null;
+    public User validateToken(String tokenValue){
+        // first find out that the token with the value is present in the DB or not.
+        // expiry time of the token > current time and deleted should be false.
+
+        Optional<Token> optionalToken = tokenRepository.findByValueAndDeletedAndExpiryAtGreaterThan(
+                tokenValue,
+                false,
+                new Date() // current Time
+        );
+
+        if(optionalToken.isEmpty()){
+            return null;
+        }
+
+        return optionalToken.get().getUser();
     }
 
     private Token createToken(User user){
